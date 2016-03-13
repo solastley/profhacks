@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Basic Page Needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MediRoute Website</title>
+    <meta name="description" content="Medicar website">
+    <meta name="keywords" content="medicar">
+    <meta name="author" content="Solomon Astley">
+    
+    <!-- Favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="img/icon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
+
+    <!-- Stylesheet
+    ================================================== -->
+    <link rel="stylesheet" type="text/css"  href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+
+  </head>
+  <body>
+
+    <!-- Main Navigation 
+    ================================================== -->
+    <nav id="tf-menu" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#"><img src="img/logo.png" alt="..."></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html" class="scroll">Home</a></li>
+                <li><a href="information.html" class="scroll">Information</a></li>
+                <li><a href="settings.html" class="scroll">Settings</a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <!-- Home Section
+    ================================================== -->
+    <div id="tf-home">
+        <div class="overlay"> <!-- Overlay Color -->
+            <div class="container"> <!-- container -->
+                <div class="content-heading text-center tf-home"> <!-- Input Your Home Content Here -->
+                    <h1>MediRoute</h1>
+                    <p class="lead">Are you currently experiencing a medical emergency?</p>
+                    <button class="btn btn-primary tf-btn color" id="help_button">Tap Here</button> <!-- Link to your portfolio section -->
+                </div>
+            </div> <!-- end container -->
+        </div><!-- End Overlay Color -->
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.1.11.1.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+
+    <script type="text/javascript" src="js/SmoothScroll.js"></script>
+
+    <!-- Contact page-->
+    <script type="text/javascript" src="js/jqBootstrapValidation.js"></script>
+    <script type="text/javascript" src="js/contact.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var myFireBase = new Firebase('https://shining-torch-6183.firebaseio.com/');
+            var car = myFireBase.child('Car');
+            var passenger_status = car.child('passenger_status');
+
+            var click_toggle = false;
+            $('#help_button').click(function() {
+                click_toggle = true;
+                var onComplete = function(error) {
+                    if (error)
+                        console.log("Error");
+                    else {
+                        window.open('reroute.html', '_self');
+                    }
+                }
+                passenger_status.set(true, onComplete);
+            });
+
+            if (!click_toggle) {
+                myFireBase.on('child_changed', function(childSnapshot, preChildKey) {
+                    if (childSnapshot.val())
+                        window.open('warning.html', '_self');
+                });
+            }
+        });
+    </script>
+  </body>
+</html>
